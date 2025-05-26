@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-dark-500 text-white font-space overflow-x-hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-orbitron;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-glass-gradient bg-opacity-10 backdrop-blur-lg border border-white/10 rounded-xl;
+  }
+  
+  .neon-border {
+    @apply relative before:absolute before:inset-0 before:rounded-xl before:p-[1px] before:bg-gradient-to-r before:from-primary-500 before:via-secondary-500 before:to-accent-500 before:-z-10;
+  }
+  
+  .btn-hologram {
+    @apply px-6 py-2 font-orbitron font-medium rounded-md relative overflow-hidden
+           bg-dark-300 bg-opacity-40 backdrop-blur-sm border border-primary-500/30
+           hover:shadow-neon transition-all duration-300 ease-out
+           before:absolute before:inset-0 before:bg-gradient-to-r before:from-primary-500/20 before:to-accent-500/20 before:opacity-0
+           hover:before:opacity-100 before:transition-opacity;
+  }
+  
+  .btn-hologram-secondary {
+    @apply btn-hologram border-secondary-500/30 hover:shadow-neon-purple
+           before:from-secondary-500/20 before:to-primary-500/20;
+  }
+  
+  .hover-glow {
+    @apply hover:text-primary-500 hover:shadow-neon transition-all duration-300;
+  }
+  
+  .floating-element {
+    @apply animate-float;
+  }
+  
+  .input-field {
+    @apply w-full px-4 py-3 bg-dark-200 bg-opacity-50 rounded-lg border border-primary-500/30
+           focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500/50
+           font-space text-white placeholder:text-gray-400;
+  }
+
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .book-animation {
+    @apply relative transform-gpu;
+    transform-style: preserve-3d;
+    animation: openBook 1s ease-out forwards;
+  }
+
+  @keyframes openBook {
+    0% {
+      transform: rotateY(60deg) translateX(-100%) scale(0.8);
+      opacity: 0;
+    }
+    100% {
+      transform: rotateY(0deg) translateX(0) scale(1);
+      opacity: 1;
+    }
+  }
+
+  .page-turn {
+    @apply relative transform-gpu transition-transform duration-500;
+    transform-style: preserve-3d;
+    transform-origin: left center;
+  }
+
+  .page-turn:hover {
+    transform: rotateY(-15deg);
+  }
+
+  .page-content {
+    @apply glass-panel p-6 h-full;
+    backface-visibility: hidden;
+  }
+
+  .page-shadow {
+    @apply absolute inset-0 bg-gradient-to-r from-black/20 to-transparent;
+    transform: translateZ(-1px);
+  }
+}
+
+/* Space background with stars */
+.space-bg {
+  background-color: #0a0a18;
+  background-image: radial-gradient(circle at 15% 50%, rgba(61, 90, 254, 0.2) 0%, transparent 25%),
+                    radial-gradient(circle at 85% 30%, rgba(114, 9, 183, 0.2) 0%, transparent 25%);
+  position: relative;
+  overflow: hidden;
+}
+
+.space-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(1px 1px at 25% 10%, white, transparent),
+    radial-gradient(1px 1px at 50% 50%, white, transparent),
+    radial-gradient(1px 1px at 10% 25%, white, transparent),
+    radial-gradient(1.5px 1.5px at 30% 85%, white, transparent),
+    radial-gradient(1.5px 1.5px at 60% 15%, white, transparent),
+    radial-gradient(1px 1px at 70% 40%, white, transparent),
+    radial-gradient(1.5px 1.5px at 90% 60%, white, transparent),
+    radial-gradient(1px 1px at 35% 75%, white, transparent),
+    radial-gradient(1px 1px at 85% 90%, white, transparent);
+  background-repeat: repeat;
+  background-size: 350px 350px;
+  opacity: 0.15;
+  z-index: 0;
+}
