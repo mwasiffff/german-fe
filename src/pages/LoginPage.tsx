@@ -14,6 +14,7 @@ const LoginPage: React.FC = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(false);
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -44,29 +45,36 @@ const LoginPage: React.FC = () => {
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
 
-  if (validate()) {
-    try {
-      const response = await fetch('https://german-be.onrender.com/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
+  if (!validate()) return;
 
-      const data = await response.json();
+  setLoading(true); // Show spinner
 
-      if (response.ok) {
-        localStorage.setItem('token', data.token); // Store token
-        localStorage.setItem('user', JSON.stringify(data.user)); // Optional: store user info
-        navigate('/intro');
-      } else {
-        alert(data.message || 'Login failed. Please check your credentials.');
-      }
-    } catch (error) {
-      console.error('Login error:', error);
-      alert('Something went wrong. Please try again.');
+  try {
+    const response = await fetch('https://german-be.onrender.com/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+    });
+
+    // Safer way to parse JSON
+    const text = await response.text();
+    const data = text ? JSON.parse(text) : {};
+
+    if (response.ok) {
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      navigate('/intro');
+    } else {
+      alert(data.message || 'Login failed. Please check your credentials.');
     }
+  } catch (error) {
+    console.error('Login error:', error);
+    alert('Something went wrong. Please try again.');
   }
+
+  setLoading(false); // Hide spinner
 };
+
 
   
   return (
@@ -159,15 +167,16 @@ const handleSubmit = async (e: React.FormEvent) => {
             </div>
             
             <div>
-              <Button
-                type="submit"
-                variant="primary"
-                fullWidth
-                size="lg"
-                icon={<ArrowRight size={18} />}
-              >
-                Login
-              </Button>
+<Button
+  type="submit"
+  variant="primary"
+  fullWidth
+  size="lg"
+  disabled={loading}
+  icon={!loading && <ArrowRight size={18} />}
+>
+  {loading ? 'Logging in...' : 'Login'}
+</Button>
             </div>
           </form>
           
