@@ -15,6 +15,8 @@ const RegisterPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -55,31 +57,37 @@ const RegisterPage: React.FC = () => {
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
 
-  if (validate()) {
-    try {
-      const response = await fetch('https://german-be.onrender.com/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
+  if (!validate()) return;
 
-      const data = await response.json();
+  setLoading(true);
 
-      if (response.ok) {
-        setShowSuccessPopup(true);
-        setTimeout(() => {
-          setShowSuccessPopup(false);
-          navigate('/login');
-        }, 3000);
-      } else {
-        alert(data.message || 'Registration failed. Try again.');
-      }
-    } catch (error) {
-      console.error('Registration error:', error);
-      alert('Something went wrong. Please try again.');
+  try {
+    const response = await fetch('https://german-be.onrender.com/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+    });
+
+    const text = await response.text();
+    const data = text ? JSON.parse(text) : {};
+
+    if (response.ok) {
+      setShowSuccessPopup(true);
+      setTimeout(() => {
+        setShowSuccessPopup(false);
+        navigate('/login');
+      }, 3000);
+    } else {
+      alert(data.message || 'Registration failed. Try again.');
     }
+  } catch (error) {
+    console.error('Registration error:', error);
+    alert('Something went wrong. Please try again.');
   }
+
+  setLoading(false);
 };
+
 
   
   return (
@@ -232,15 +240,17 @@ const handleSubmit = async (e: React.FormEvent) => {
             </div>
             
             <div>
-              <Button
-                type="submit"
-                variant="primary"
-                fullWidth
-                size="lg"
-                icon={<ArrowRight size={18} />}
-              >
-                Join Waitlist Now
-              </Button>
+<Button
+  type="submit"
+  variant="primary"
+  fullWidth
+  size="lg"
+  disabled={loading}
+  icon={!loading && <ArrowRight size={18} />}
+>
+  {loading ? 'Registering...' : 'Join Waitlist Now'}
+</Button>
+
             </div>
           </form>
           
