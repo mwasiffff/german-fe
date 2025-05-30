@@ -144,20 +144,17 @@ const IntroVideoPage: React.FC = () => {
   transition={{ duration: 0.6, delay: 0.5 }}
 >
   <div className="relative aspect-video rounded-2xl overflow-hidden glass-panel neon-border">
-<video
-  className="w-full h-full object-cover rounded-xl"
-  autoPlay
-  loop
-  muted
-  controls
-  playsInline
->
-  <source
-    src="https://drive.google.com/uc?export=download&id=1a_yXTd8D3xyYJaSVwUuSanYLVVgzli0p"
-    type="video/mp4"
-  />
-  Your browser does not support the video tag.
-</video>
+    <video
+      className="w-full h-full object-cover"
+   controls              // ✅ Shows native controls (play, pause, seek, etc.)
+      muted={false}         // ✅ Start unmuted or set to true if needed
+      autoPlay              // ✅ Starts automatically
+      loop                  // ✅ Loops forever
+      playsInline
+    >
+      <source src={videoSrc} type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
 
 
   </div>
