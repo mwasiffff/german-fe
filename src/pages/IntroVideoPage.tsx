@@ -146,18 +146,19 @@ const IntroVideoPage: React.FC = () => {
   <div className="relative aspect-video rounded-2xl overflow-hidden glass-panel neon-border">
 <video
   className="w-full h-full object-cover rounded-xl"
-  controls
   autoPlay
   loop
   muted
+  controls
   playsInline
 >
   <source
-    src="https://cdn.jsdelivr.net/gh/mwasiffff/german-fe@main/public/videos/vid1.mp4"
+    src="https://drive.google.com/uc?export=download&id=1a_yXTd8D3xyYJaSVwUuSanYLVVgzli0p"
     type="video/mp4"
   />
   Your browser does not support the video tag.
 </video>
+
 
   </div>
         {/* Skip Button Below Video */}
